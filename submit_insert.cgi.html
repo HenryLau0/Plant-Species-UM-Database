@@ -1,0 +1,68 @@
+#!/usr/bin/python
+
+import MySQLdb
+import cgi, cgitb
+cgitb.enable()
+
+db = MySQLdb.connect(host="localhost",
+                     user="root",
+                     db="sdps_wj")
+
+cur = db.cursor()
+
+form = cgi.FieldStorage()
+
+# form
+formSelected = form.getvalue('tables')
+action = form.getvalue('Submit')
+
+# collectors
+collectorName = form.getvalue('collectorName')
+collectorOrganisation = form.getvalue('collectorOrganisation')
+
+# species
+speciesName = form.getvalue('speciesName')
+authorship = form.getvalue('authorship')
+year = form.getvalue('year')
+
+# samples
+locality = form.getvalue('locality')
+speciesID = form.getvalue('speciesOpt')
+collectorID = form.getvalue('collectorOpt')
+
+print "Content-type: text/html\r\n\r\n"
+print "<html><head><title>submit_insertPage</title></head>"
+print "<body><h1 align=center style='color:00ac54'>Samples Database for Plant Species</h1>"
+print "<h2 align=center style='color:00ac54'>Insert Data into the Database</h2></header>"
+
+if action == 'Submit':
+        if formSelected == 'collectors':
+                collectors_sql = 'INSERT INTO collectors(collectorName, collectorOrganisation) VALUES (%s, %s)'
+                try:
+                        cur.execute(collectors_sql, (collectorName, collectorOrganisation))
+                        db.commit()
+                        print "<h4 align=center>Record successfully inserted into table'collectors'</h4>"
+                except Exception as e:
+                        print "'An error occurred:', str(e))"
+        if formSelected == 'species':
+                species_sql = 'INSERT INTO species(spName, spAuthors, spYear) VALUES (%s, %s, %s)'
+                try:
+                        cur.execute(species_sql, (speciesName, authorship, year))
+                        db.commit()
+                        print "<h4 align=center>Record successfully inserted into table'species'</h4>"
+                except Exception as e:
+                        print "'An error occurred:', str(e))"
+        if formSelected == 'samples':
+                samples_sql = 'INSERT INTO samples(spID, collectorID, locality) VALUES (%s, %s, %s)'
+try:
+                        cur.execute(samples_sql, (speciesID, collectorID, locality))
+                        db.commit()
+                        print "<h4 align=center>Record successfully inserted into table'samples'</h4>"
+                except Exception as e:
+                        print "'An error occurred:', str(e))"
+
+print "<div align=center><button onclick=window.location.href='insertPage.cgi';><<< Insert Page</button>"
+print "<button onclick=window.location.href='/./sqf7007/wj/main.html';>>>> Main Page</button>"
+print "</div></body></html>"
+
+db.close()

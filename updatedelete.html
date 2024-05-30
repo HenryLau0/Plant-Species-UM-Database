@@ -1,0 +1,83 @@
+<html>
+<title>Update & Delete Page</title>
+<head>
+    <style>
+    .button {
+  background-color: #54cc64;
+  border: none;
+  border-radius:5px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+    .button:hover {
+  background-color: #90EE90;
+}
+
+    </style>
+
+</head>
+<body>
+<h1 style="color:#43a451;text-align:center;">Samples Database for Plant Species</h1>
+<h2 style="color:#43a451;text-align:center;">Update/Delete Data in the Database</h2>
+
+<label>Select table:</label>
+<select id="dropdown" onchange="showForm()">
+  <option value="default">Choose TABLE</option>
+  <option value="form1">Collectors</option>
+  <option value="form2">Species</option>
+  <option value="form3">Samples</option>
+</select>
+&nbsp;&nbsp;&nbsp;  
+  <input class="button" type="submit" value="Delete">&nbsp;&nbsp;&nbsp;
+  <input class="button" type="submit" value="Update">&nbsp;&nbsp;&nbsp;
+  <a href="#">Reset</a><br><br>
+
+<form id="form1" style="display: none;">
+  <!-- Form 1 fields and content -->
+  Insert data into <b>Collectors</b> table. <br><br>
+  <label for="message">Collector name</label> <br>
+<textarea id="message" name="message" style="border-radius:5px;border:2px solid #43a451;" rows="4" cols="50"></textarea><br><br>
+<label for="message">Organism</label><br>
+<textarea id="message" name="message" style="border-radius:5px;border:2px solid #43a451;" rows="4" cols="50"></textarea>
+</form>
+
+<form id="form2" style="display: none;">
+  <!-- Form 2 fields and content -->
+  Insert data into <b>Species</b> table. <br><br>
+  <label for="message">Species name</label> <br>
+<textarea id="message" name="message" style="border-radius:5px;border:2px solid #43a451;" rows="4" cols="50"></textarea><br><br>
+  <label for="message">Authorship</label> <br>
+<textarea id="message" name="message" style="border-radius:5px;border:2px solid #43a451;" rows="4" cols="50"></textarea><br><br>
+  <label for="message">Year</label> <br>
+<textarea id="message" name="message" style="border-radius:5px;border:2px solid #43a451;" rows="4" cols="50"></textarea><br><br>
+</form>
+
+<form id="form3" style="display: none;">
+  <!-- Form 3 fields and content -->
+  Insert data into <b>Samples</b> table.<br><br>
+  <label for="species">Select species name</label>
+<select id="species" name="species">
+  <option value="hibiscus">Hibiscus rosa-sinensis</option>
+</select><br><br>
+
+<label for="collector">Select collector name</label>
+<select id="collector" name="collector">
+  <option value="arpah">Arpah Abu</option>
+</select><br><br>
+
+  <label for="message">Locality</label> <br>
+<textarea id="message" name="message" style="border-radius:5px;border:2px solid #43a451;" rows="4" cols="50"></textarea>
+</form>
+<i>Press F5 to refresh page.</i>
+<br><br>
+<input type=button id=cancel name=cancel value=Cancel onClick=window.close(); return true;>
+
+</body>
+</html>

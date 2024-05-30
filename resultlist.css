@@ -1,0 +1,32 @@
+h1{
+    text-align: center;
+    color: #43a451;
+}
+
+h3{
+    text-align: center;
+    color: #43a451;
+}
+
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+table td, th {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+  
+table tr:nth-child(old){background-color: #e1f8ea;}
+
+table tr:hover {background-color: #b3eff1;}
+ 
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #55ce65;
+    color: white;
+}

@@ -1,0 +1,188 @@
+#!/usr/bin/python
+
+import MySQLdb
+
+# Connect to MySQL database
+db = MySQLdb.connect(host="localhost", user="root", db="databaes")
+
+# Create a cursor object to execute queries
+cur = db.cursor()
+
+print "Content-type: text/html\r\n\r\n"
+
+print "<html><head><title>Samples Database for Plant Species</title>"
+print "<style>*{box-sizing: border-box;}body {margin: 2%;}.topnav {display: flex;justify-content: space-b$
+print "#topnav::before {content: '* ';color: red;}.text-box {width: 99%;height: 25px;margin-top: 1%;borde$
+print ".reset {border: none;background-color: white;text-decoration: underline;}"
+print ".reset:hover {cursor: pointer;}"
+print ".submit {width: 10%;height: 30px;margin: 0% 2%;background-color: #00d769;border: none;border-radiu$
+print ".submit:hover {cursor: pointer;background-color: #50e79f;}</style></head>"
+
+print "<body><div align=center style='color: #05ac53;'><h1>Samples Database for Plant Species</h1><h2>Ins$
+
+# Table selection form 
+print "<form id='insertPageForm' action='insertPage_process.py' method='post' onsubmit='return validateFo$
+print "<label>Select table</label>"
+print "<select id='selectForm' name='selectForm'>"
+print "<option value=''>Choose TABLE</option>"
+print "<option value='collectors'>Collectors</option>"
+print "<option value='species'>Species</option>"
+print "<option value='samples'>Samples</option>"
+print "</select>"
+
+# Submit/reset button for table selection form
+print "<input class='submit' type='submit' name='submit' value='Submit'>"
+print "<input class='reset' type='reset' id='resetButton'>"
+
+# Collectors table form
+print "<div id='collectors' style='display:none;'>"
+print "<p>Insert data into <b>Collectors</b> table</p>"
+print "<label for='collectorName'>Collector Name</label><br>"
+print "<input class='text-box' type='text' id='collectorName' name='collectorName'><br><br>"
+print "<label for='organisation'>Organisation</label>"
+print "<input class='text-box' type='text' id='organisation' name='organisation'><br><br></div>"
+
+# Species table form
+print "<div id='species' style='display:none;'>"
+print "<p>Insert data into <b>Species</b> table</p>"
+print "<label for='spName'>Species Name</label><br>"
+print "<input class='text-box' type='text' id='spName' name='spName'><br><br>"
+print "<label for='authorship'>Authorship</label>"
+print "<input class='text-box' type='text' id='authorship' name='authorship'><br><br>"
+print "<label for='year'>Year</label>"
+print "<input class='text-box' type='text' id='year' name='year'><br><br></div>"
+
+# Sample table form
+print "<div id='samples' style='display:none;'>"
+print "<p>Insert data into <b>Samples</b> table</p>"
+
+# Extract species names from the database
+cur.execute("SELECT spID, spName FROM species")
+species_data = cur.fetchall()
+
+# For dropdown option
+print "<label for='spID'>Select species name</label>"
+print "<select id='spID' name='spID'>"
+print "<option value=''>Select Species</option>"
+for row in species_data:
+    print "<option value='{}'>{}</option>".format(row[0], row[1])
+print "</select><br><br>"
+
+# Extract collector names from the database
+cur.execute("SELECT collectorID, collectorName FROM collectors")
+collector_data = cur.fetchall()
+
+print "<label for='collectorID'>Select collector name</label>"
+print "<select id='collectorID' name='collectorID'>"
+print "<option value=''>Select Collector</option>"
+for row in collector_data:
+    print "<option value='{}'>{}</option>".format(row[0], row[1])
+print "</select><br><br>"
+
+print "<label for='locality'>Locality</label>"
+print "<input class='text-box' type='text' id='locality' name='locality'><br><br></div><br><br>"
+
+print "<input type='button' id='cancel' name='cancel' value='Cancel' onClick='window.close(); return true$
+print "</form>"
+
+# Javascript
+print """
+<script>
+    function validateForm() {
+        var form = document.getElementById('insertPageForm');
+        var selectForm = document.getElementById('selectForm');
+        var collectorName = document.getElementById('collectorName');
+        var organisation = document.getElementById('organisation');
+        var speciesName = document.getElementById('spName');
+        var authorship = document.getElementById('authorship');
+        var year = document.getElementById('year');
+        var spID = document.getElementById('spID');
+        var collectorID = document.getElementById('collectorID');
+        var locality = document.getElementById('locality');
+
+        if (selectForm.value === '') {
+            alert('Please select a table.');
+            return false;
+        }
+
+        if (selectForm.value === 'collectors' && collectorName.value.trim() === '') {
+            alert('Please enter a collector name.');
+            collectorName.focus();
+            return false;
+        }
+
+        if (selectForm.value === 'collectors' && organisation.value.trim() === '') {
+            alert('Please enter an organisation. Insert NA if not available');
+            organisation.focus();
+            return false;
+        }
+
+        if (selectForm.value === 'species' && speciesName.value.trim() === '') {
+            alert('Please enter a species name');
+            speciesName.focus();
+            return false;
+        }
+
+        if (selectForm.value === 'species' && authorship.value.trim() === '') {
+            alert('Please enter an authorship. Insert NA if not available');
+            authorship.focus();
+            return false;
+            }
+
+        if (selectForm.value === 'species' && year.value.trim() === '') {
+            alert('Please enter a year. Insert XXXX if not available');
+            year.focus();
+            return false;
+        }
+
+        if (selectForm.value === 'samples' && spID.value === '') {
+            alert('Please select a species name.');
+            spID.focus();
+            return false;
+        }
+        
+        if (selectForm.value === 'samples' && collectorID.value === '') {
+            alert('Please select a collector name.');
+            collectorID.focus();
+            return false;
+        }
+
+        if (selectForm.value === 'samples' && locality.value.trim() === '') {
+            alert('Please enter a locality.');
+            locality.focus();
+            return false;
+        }
+                return true;
+    }
+
+    function showForm(selectedForm) {
+        var collectors = document.getElementById('collectors');
+        var species = document.getElementById('species');
+        var samples = document.getElementById('samples');
+
+        collectors.style.display = 'none';
+        species.style.display = 'none';
+        samples.style.display = 'none';
+
+        if (selectedForm === 'collectors') {
+                    collectors.style.display = 'block';
+        } else if (selectedForm === 'species') {
+            species.style.display = 'block';
+        } else if (selectedForm === 'samples') {
+            samples.style.display = 'block';
+        }
+    }
+
+    window.onload = function() {
+        let dropdown = document.getElementById('selectForm');
+        dropdown.addEventListener('change', function() {
+            showForm(dropdown.value);
+        });
+
+    document.getElementById('resetButton').addEventListener('click', function() {
+        document.getElementById('insertPageForm').selectedIndex = 0;
+        showForm('');
+    });
+</script>
+"""
+print "</body></html>"
